@@ -7,13 +7,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServerContainer {
 
     private static ExecutorService executorService;
-    private static ArrayList<Transport<?>> list = new ArrayList<>();
+    private static CopyOnWriteArrayList<Transport<?>> list = new CopyOnWriteArrayList<>();
 
 
     public static void main(String[] args) throws IOException {
@@ -41,14 +42,14 @@ public class ServerContainer {
                     while (true) {
                         communicate(ois, oos);
                     }
-                } catch (IOException| ClassNotFoundException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
     }
 
-    private static void communicate(ObjectInputStream ois, ObjectOutputStream oos) throws IOException, ClassNotFoundException {
+    private static void communicate(ObjectInputStream ois, ObjectOutputStream oos) throws Exception {
 
 
         Request request = (Request) ois.readObject();
@@ -63,8 +64,13 @@ public class ServerContainer {
             }
             case GET: {
                 Response response = new Response(list);
+                for (Transport<?> transport : list) {
+                    Thread.sleep(1_000);
+                    System.out.println(transport);
+                }
                 oos.writeObject(response);
                 oos.flush();
+                break;
             }
         }
 
