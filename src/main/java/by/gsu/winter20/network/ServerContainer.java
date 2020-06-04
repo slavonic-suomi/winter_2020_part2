@@ -60,15 +60,25 @@ public class ServerContainer {
             case ADD: {
                 Transport<?> element = (Transport<?>) request.getPayload();
                 list.add(element);
+                oos.flush();
                 break;
             }
             case GET: {
-                Response response = new Response(list);
-                for (Transport<?> transport : list) {
-                    Thread.sleep(1_000);
-                    System.out.println(transport);
-                }
+                Response response = new Response(new ArrayList<>(list));
                 oos.writeObject(response);
+                oos.flush();
+                break;
+            }
+            case DELETE: {
+                int index = (Integer) request.getPayload();
+                list.remove(index);
+                oos.flush();
+                break;
+            }
+            case UPDATE: {
+                UpdatePayload updateData = (UpdatePayload) request.getPayload();
+                Transport<?> element = (Transport<?>) updateData.getElement();
+                list.set(updateData.getIndex(), element);
                 oos.flush();
                 break;
             }

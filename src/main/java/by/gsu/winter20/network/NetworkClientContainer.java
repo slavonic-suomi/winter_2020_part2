@@ -40,12 +40,24 @@ public class NetworkClientContainer<T extends Serializable> implements Container
 
     @Override
     public void set(int index, T element) {
-
+        Request request = new Request(Type.UPDATE, new UpdatePayload(index, element));
+        try {
+            oos.writeObject(request);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(int index) {
-
+        Request request = new Request(Type.DELETE, index);
+        try {
+            oos.writeObject(request);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
