@@ -10,6 +10,11 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor("org.projectlombok:lombok:1.18.12")
+    implementation("org.projectlombok:lombok:1.18.12")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.11.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
+
 //    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = "5.6.2")
     testImplementation("org.mockito:mockito-core:3.3.3")

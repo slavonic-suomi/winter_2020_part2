@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LocalContainer<T> implements Container<T> {
 
-    private List<T> list = new ArrayList<>();
+    private final List<T> list = new ArrayList<>();
 
     @Override
     public int size() {
