@@ -20,7 +20,7 @@ public class DBMain {
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "root");
              PreparedStatement preparedStatement = connection.prepareStatement( "insert into user (login, type) values (?, 'p')")) {
 
-            User userToSave = new User(null, "User11", Set.of());
+            User userToSave = new User(null, "User12", List.of());
 
             preparedStatement.setString(1, userToSave.getLogin());
             int count = preparedStatement.executeUpdate();
@@ -52,17 +52,17 @@ public class DBMain {
         User result;
         switch (type) {
             case "p" : {
-                result = new User(id, login, Set.of());
+                result = new User(id, login, List.of());
                 break;
             }
             case "f" : {
                 String profile = resultSet.getString("facebook_profile");
-                result = new FacebookUser(id, login, profile, Set.of());
+                result = new FacebookUser(id, login, profile, List.of());
                 break;
             }
             case "g" : {
                 String uid = resultSet.getString("google_uid");
-                result = new GoogleUser(id, login, uid, Set.of());
+                result = new GoogleUser(id, login, uid, List.of());
                 break;
             }
             default: throw new IllegalArgumentException("unknown user type");
