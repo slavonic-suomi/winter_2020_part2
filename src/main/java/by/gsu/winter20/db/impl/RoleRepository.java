@@ -5,8 +5,8 @@ import by.gsu.winter20.db.ConnectionManager;
 import by.gsu.winter20.db.RowMapper;
 import by.gsu.winter20.model.domain.Role;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +19,13 @@ public class RoleRepository extends BaseRepository<Role> {
     @Override
     protected String getTableName() {
         return "role";
+    }
+
+    @Override
+    protected PreparedStatement createInsertStatement(Connection connection, Role element) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("insert into role (`name`) values (?)", Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, element.getName());
+        return statement;
     }
 
     public List<Role> getRolesByUser(Integer userId) {

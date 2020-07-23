@@ -4,10 +4,10 @@ import by.gsu.winter20.model.domain.IEntity;
 import by.gsu.winter20.utils.Container;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.val;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,8 +41,21 @@ public abstract class BaseRepository<E extends IEntity> implements Container<E> 
 
     @Override
     public void add(E element) {
+        manager.workWithConnection(connection -> {
+            try(PreparedStatement statement = createInsertStatement(connection, element)) {
+                statement.executeUpdate();
+                var idResultSet = statement.getGeneratedKeys();
+                boolean hasIds = idResultSet.next();
+                if (hasIds) {
+                    int id = idResultSet.getInt(1);
+                    element.setId(id);
+                }
 
+            }
+        });
     }
+
+    protected abstract PreparedStatement createInsertStatement(Connection connection, E element) throws SQLException;
 
     @Override
     public void set(int index, E element) {

@@ -5,11 +5,12 @@ import by.gsu.winter20.db.impl.RoleRepository;
 import by.gsu.winter20.db.impl.UserRepository;
 import by.gsu.winter20.db.impl.mapper.RoleMapper;
 import by.gsu.winter20.db.impl.mapper.UserMapper;
+import by.gsu.winter20.menu.*;
+import by.gsu.winter20.model.RoleFactory;
+import by.gsu.winter20.model.UserFactory;
+import by.gsu.winter20.model.domain.Role;
 import by.gsu.winter20.model.domain.User;
 import by.gsu.winter20.utils.Factory;
-import by.gsu.winter20.utils.ReflectionFactory;
-import by.gsu.winter20.utils.ScannerWrapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
 
@@ -17,15 +18,6 @@ public class Main {
 
     @SneakyThrows
     public static void main(String[] args) {
-//        Factory<User> factory = new ReflectionFactory<>(User.class, new ScannerWrapper());
-//
-//        User user = factory.create();
-//        System.out.println(user);
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        String userJson = mapper.writeValueAsString(user);
-//        System.out.println(userJson);
 
         ConnectionManager manager = new ConnectionManager();
 
@@ -35,12 +27,27 @@ public class Main {
         UserMapper userMapper = new UserMapper(roleRepository);
         UserRepository userRepository = new UserRepository(manager, userMapper);
 
+        Factory<User> userFactory = new UserFactory();
+        Factory<Role> roleFactory = new RoleFactory();
 
-        System.out.println(userRepository.size());
+        MenuItem<Role>[] roleItems = new MenuItem[3];
 
-        System.out.println(userRepository.getAll());
+        roleItems[0] = new AddMenuItem<>(roleRepository, roleFactory);
+        roleItems[1] = new DeleteMenuItem<>(roleRepository);
+        roleItems[2] = new PrintAllMenuItem<>(roleRepository);
+        TopLevelMenu<Role> roleMenu = new TopLevelMenu<>(roleItems, "roles", 1);
 
-        System.out.println(roleRepository.getAll());
+        MenuItem<User>[] userItems = new MenuItem[3];
 
+        userItems[0] = new AddMenuItem<>(userRepository, userFactory);
+        userItems[1] = new DeleteMenuItem<>(userRepository);
+        userItems[2] = new PrintAllMenuItem<>(userRepository);
+        TopLevelMenu<User> userMenu = new TopLevelMenu<>(userItems, "users", 2);
+
+
+        MenuItem<?>[] globalItems = {roleMenu, userMenu};
+        TopLevelMenu<?> globalMenu = new TopLevelMenu(globalItems, "global", 0);
+
+        globalMenu.run();
     }
 }

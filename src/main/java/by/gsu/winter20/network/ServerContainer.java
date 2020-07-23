@@ -1,12 +1,10 @@
 package by.gsu.winter20.network;
 
-import by.gsu.winter20.model.domain.Transport;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,7 +12,7 @@ import java.util.concurrent.Executors;
 public class ServerContainer {
 
     private static ExecutorService executorService;
-    private static CopyOnWriteArrayList<Transport<?>> list = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<Object> list = new CopyOnWriteArrayList<>();
 
 
     public static void main(String[] args) throws IOException {
@@ -30,21 +28,18 @@ public class ServerContainer {
     }
 
     private static void process(Socket socket) {
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ObjectInputStream ois  = new ObjectInputStream(socket.getInputStream());
-                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+        executorService.submit(() -> {
+            try {
+                ObjectInputStream ois  = new ObjectInputStream(socket.getInputStream());
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
-                    System.out.println("ready to communicate");
+                System.out.println("ready to communicate");
 
-                    while (true) {
-                        communicate(ois, oos);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                while (true) {
+                    communicate(ois, oos);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -58,7 +53,7 @@ public class ServerContainer {
 
         switch (request.getType()) {
             case ADD: {
-                Transport<?> element = (Transport<?>) request.getPayload();
+                Object element = request.getPayload();
                 list.add(element);
                 oos.flush();
                 break;
@@ -77,7 +72,7 @@ public class ServerContainer {
             }
             case UPDATE: {
                 UpdatePayload updateData = (UpdatePayload) request.getPayload();
-                Transport<?> element = (Transport<?>) updateData.getElement();
+                Object element = updateData.getElement();
                 list.set(updateData.getIndex(), element);
                 oos.flush();
                 break;
