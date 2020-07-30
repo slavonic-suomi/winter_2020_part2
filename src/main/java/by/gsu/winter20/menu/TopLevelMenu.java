@@ -4,24 +4,23 @@ import by.gsu.winter20.utils.ScannerWrapper;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TopLevelMenu<T> implements MenuItem<T> {
 
-    private MenuItem<T>[] items;
-    private ScannerWrapper sc = new ScannerWrapper();
+    private List<MenuItem<T>> items;
+    private ScannerWrapper sc;
     private String title;
     private int order;
 
-    public TopLevelMenu(MenuItem<T>[] items, String title, int order) {
-        Arrays.sort(items, new Comparator<MenuItem<T>>() {
-            @Override
-            public int compare(MenuItem<T> o1, MenuItem<T> o2) {
-                return Integer.compare(o1.getOrder(), o2.getOrder());
-            }
-        });
-        this.items = items;
+    public TopLevelMenu(ScannerWrapper sc, List<MenuItem<T>> items, String title, int order) {
+        this.items = items.stream()
+                .sorted(Comparator.comparingInt(MenuItem::getOrder))
+                .collect(Collectors.toList());;
         this.title = title;
         this.order = order;
+        this.sc = sc;
     }
 
     @Override
