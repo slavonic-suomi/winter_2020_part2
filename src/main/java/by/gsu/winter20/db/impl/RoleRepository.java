@@ -4,12 +4,14 @@ import by.gsu.winter20.db.BaseRepository;
 import by.gsu.winter20.db.ConnectionManager;
 import by.gsu.winter20.db.RowMapper;
 import by.gsu.winter20.model.domain.Role;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class RoleRepository extends BaseRepository<Role> {
 
     public RoleRepository(ConnectionManager manager, RowMapper<Role> mapper) {
@@ -40,7 +42,7 @@ public class RoleRepository extends BaseRepository<Role> {
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        result.add(mapper.mapRow(resultSet));
+                        result.add(mapper.mapRow(resultSet, 0));
                     }
                 }
             }

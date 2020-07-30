@@ -11,6 +11,7 @@ import by.gsu.winter20.model.UserFactory;
 import by.gsu.winter20.model.domain.Role;
 import by.gsu.winter20.model.domain.User;
 import by.gsu.winter20.utils.Factory;
+import by.gsu.winter20.utils.ScannerWrapper;
 import lombok.SneakyThrows;
 
 
@@ -20,6 +21,7 @@ public class Main {
     public static void main(String[] args) {
 
         ConnectionManager manager = new ConnectionManager();
+        ScannerWrapper scannerWrapper = new ScannerWrapper();
 
         RoleMapper roleMapper = new RoleMapper();
         RoleRepository roleRepository = new RoleRepository(manager, roleMapper);
@@ -27,8 +29,8 @@ public class Main {
         UserMapper userMapper = new UserMapper(roleRepository);
         UserRepository userRepository = new UserRepository(manager, userMapper);
 
-        Factory<User> userFactory = new UserFactory();
-        Factory<Role> roleFactory = new RoleFactory();
+        Factory<User> userFactory = new UserFactory(scannerWrapper);
+        Factory<Role> roleFactory = new RoleFactory(scannerWrapper);
 
         MenuItem<Role>[] roleItems = new MenuItem[3];
 

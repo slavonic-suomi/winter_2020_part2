@@ -9,19 +9,21 @@ import by.gsu.winter20.model.domain.Role;
 import by.gsu.winter20.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
+@Component
 public class UserMapper implements RowMapper<User> {
 
     private final RoleRepository roleBaseRepository;
 
     @Override
     @SneakyThrows
-    public User mapRow(ResultSet resultSet) {
+    public User mapRow(ResultSet resultSet, int row) {
         int id = resultSet.getInt("id");
         String login = resultSet.getString("login");
         String type = resultSet.getString("type");

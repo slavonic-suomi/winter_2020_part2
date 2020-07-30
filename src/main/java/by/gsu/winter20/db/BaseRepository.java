@@ -42,17 +42,16 @@ public abstract class BaseRepository<E extends IEntity> implements Container<E> 
     @Override
     public void add(E element) {
         manager.workWithConnection(connection -> {
-            try(PreparedStatement statement = createInsertStatement(connection, element)) {
+            try (PreparedStatement statement = createInsertStatement(connection, element)) {
                 statement.executeUpdate();
-                var idResultSet = statement.getGeneratedKeys();
-                boolean hasIds = idResultSet.next();
-                if (hasIds) {
-                    int id = idResultSet.getInt(1);
+                ResultSet resultSet = statement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    int id = resultSet.getInt(1);
                     element.setId(id);
                 }
-
             }
         });
+
     }
 
     protected abstract PreparedStatement createInsertStatement(Connection connection, E element) throws SQLException;
@@ -75,7 +74,7 @@ public abstract class BaseRepository<E extends IEntity> implements Container<E> 
                  ResultSet resultSet = statement.executeQuery("select * from " + getTableName())) {
 
                 while (resultSet.next()) {
-                    E element = mapper.mapRow(resultSet);
+                    E element = mapper.mapRow(resultSet, 0);
                     result.add(element);
                 }
 
@@ -84,3 +83,19 @@ public abstract class BaseRepository<E extends IEntity> implements Container<E> 
         return result;
     }
 }
+
+
+/*
+* manager.workWithConnection(connection -> {
+            try(PreparedStatement statement = createInsertStatement(connection, element)) {
+                statement.executeUpdate();
+                var idResultSet = statement.getGeneratedKeys();
+                boolean hasIds = idResultSet.next();
+                if (hasIds) {
+                    int id = idResultSet.getInt(1);
+                    element.setId(id);
+                }
+
+            }
+        });
+* */

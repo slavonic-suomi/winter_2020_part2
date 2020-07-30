@@ -16,10 +16,13 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
 
-//    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.20'
+    implementation("org.springframework:spring-core:5.2.8.RELEASE")
+    implementation("org.springframework:spring-beans:5.2.8.RELEASE")
+    implementation("org.springframework:spring-context:5.2.8.RELEASE")
+    implementation("org.springframework:spring-jdbc:5.2.8.RELEASE")
+
     runtimeOnly("mysql:mysql-connector-java:8.0.20")
 
-//    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = "5.6.2")
     testImplementation("org.mockito:mockito-core:3.3.3")
     testImplementation("org.mockito:mockito-junit-jupiter:3.3.3")

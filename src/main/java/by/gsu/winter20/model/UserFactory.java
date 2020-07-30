@@ -5,12 +5,16 @@ import by.gsu.winter20.model.domain.GoogleUser;
 import by.gsu.winter20.model.domain.User;
 import by.gsu.winter20.utils.Factory;
 import by.gsu.winter20.utils.ScannerWrapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class UserFactory implements Factory<User> {
 
-    private final ScannerWrapper sc = new ScannerWrapper();
+    private final ScannerWrapper sc;
 
     @Override
     public User create() {
