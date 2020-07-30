@@ -28,16 +28,19 @@ public abstract class BaseRepository<E extends IEntity> implements Container<E> 
 
     @Override
     public int size() {
-        AtomicInteger result = new AtomicInteger(0);
-        manager.workWithConnection(connection -> {
-            try(Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("select count(*) from " + getTableName())) {
-                resultSet.next();
-                result.set(resultSet.getInt(1));
-            }
-        });
+        List<Integer> idsList = jdbcTemplate.query("select count(*) from " + getTableName(), (rs, rowNum) -> rs.getInt(1));
+        return idsList.stream().findFirst().orElse(0);
 
-        return result.get();
+//        AtomicInteger result = new AtomicInteger(0);
+//        manager.workWithConnection(connection -> {
+//            try(Statement statement = connection.createStatement();
+//                ResultSet resultSet = statement.executeQuery("select count(*) from " + getTableName())) {
+//                resultSet.next();
+//                result.set(resultSet.getInt(1));
+//            }
+//        });
+//
+//        return result.get();
     }
 
     @Override

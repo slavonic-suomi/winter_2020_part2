@@ -16,6 +16,11 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
 
+
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
+    implementation("org.liquibase:liquibase-core:3.10.2")
+    implementation("org.yaml:snakeyaml:1.26")
+
     implementation("org.springframework:spring-core:5.2.8.RELEASE")
     implementation("org.springframework:spring-beans:5.2.8.RELEASE")
     implementation("org.springframework:spring-context:5.2.8.RELEASE")
