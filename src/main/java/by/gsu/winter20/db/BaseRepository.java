@@ -5,6 +5,7 @@ import by.gsu.winter20.utils.Container;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
 import java.sql.*;
@@ -20,6 +21,7 @@ import java.util.function.Consumer;
 public abstract class BaseRepository<E extends IEntity> implements Container<E> {
 
     protected final ConnectionManager manager;
+    protected final JdbcTemplate jdbcTemplate;
     protected final RowMapper<E> mapper;
 
     protected abstract String getTableName();
@@ -27,7 +29,6 @@ public abstract class BaseRepository<E extends IEntity> implements Container<E> 
     @Override
     public int size() {
         AtomicInteger result = new AtomicInteger(0);
-
         manager.workWithConnection(connection -> {
             try(Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery("select count(*) from " + getTableName())) {

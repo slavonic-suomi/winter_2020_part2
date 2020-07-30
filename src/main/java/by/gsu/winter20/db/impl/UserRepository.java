@@ -6,6 +6,7 @@ import by.gsu.winter20.db.RowMapper;
 import by.gsu.winter20.model.domain.FacebookUser;
 import by.gsu.winter20.model.domain.GoogleUser;
 import by.gsu.winter20.model.domain.User;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -13,8 +14,8 @@ import java.sql.*;
 @Component
 public class UserRepository extends BaseRepository<User> {
 
-    public UserRepository(ConnectionManager manager, RowMapper<User> userRowMapper) {
-        super(manager, userRowMapper);
+    public UserRepository(ConnectionManager manager, JdbcTemplate jdbcTemplate, RowMapper<User> userRowMapper) {
+        super(manager, jdbcTemplate, userRowMapper);
     }
 
     @Override

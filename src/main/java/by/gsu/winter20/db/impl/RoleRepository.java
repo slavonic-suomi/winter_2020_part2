@@ -4,6 +4,7 @@ import by.gsu.winter20.db.BaseRepository;
 import by.gsu.winter20.db.ConnectionManager;
 import by.gsu.winter20.db.RowMapper;
 import by.gsu.winter20.model.domain.Role;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.util.List;
 @Component
 public class RoleRepository extends BaseRepository<Role> {
 
-    public RoleRepository(ConnectionManager manager, RowMapper<Role> mapper) {
-        super(manager, mapper);
+    public RoleRepository(ConnectionManager manager, JdbcTemplate jdbcTemplate, RowMapper<Role> mapper) {
+        super(manager, jdbcTemplate, mapper);
     }
 
     @Override
